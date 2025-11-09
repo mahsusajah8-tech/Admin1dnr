@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Produk - DNRstore</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="back">←</a>
+    <h1>Produk</h1>
+  </header>
+
+  <main class="container">
+    <h2 id="title"></h2>
+    <div id="list" class="grid"></div>
+  </main>
+
+  <script>
+    const PRODUCTS = [
+      {id:'akun-1', category:'akun', title:'Akun ML 86', price:20000},
+      {id:'akun-2', category:'akun', title:'Akun ML 170', price:35000},
+      {id:'akun-3', category:'akun', title:'Akun ML 344', price:65000},
+      {id:'akun-4', category:'akun', title:'Akun ML 514', price:95000},
+      {id:'secret-1', category:'secret', title:'Secret A', price:25000},
+      {id:'secret-2', category:'secret', title:'Secret B', price:40000},
+      {id:'secret-3', category:'secret', title:'Secret C', price:55000},
+      {id:'secret-4', category:'secret', title:'Secret D', price:80000},
+      {id:'koin-1', category:'koin', title:'Koin 1000', price:15000}
+    ];
+    function qs(v){return new URLSearchParams(location.search).get(v)}
+    const type = qs('type') || 'akun';
+    document.getElementById('title').textContent = type.toUpperCase();
+    const list = document.getElementById('list');
+    PRODUCTS.filter(p=>p.category===type).forEach(p=>{
+      const el = document.createElement('div');
+      el.className='card';
+      el.innerHTML = `<h3>${p.title}</h3><p class="price">Rp${p.price.toLocaleString()}</p>
+        <a class="btn" href="checkout.html?pid=${encodeURIComponent(p.id)}">Beli</a>`;
+      list.appendChild(el);
+    });
+  </script>
+</body>
+</html>

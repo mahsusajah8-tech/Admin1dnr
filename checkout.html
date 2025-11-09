@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Checkout - DNRstore</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="back"></a>
+    <h1>Checkout</h1>
+  </header>
+
+  <main class="container">
+    <div id="productInfo" class="card"></div>
+
+    <form id="orderForm" class="form">
+      <div id="dynamicFields"></div>
+
+      <h3>Pilih Metode Pembayaran</h3>
+      <label><input type="radio" name="pay" value="qris" checked> QRIS</label>
+      <label><input type="radio" name="pay" value="dana"> DANA (0813-1138-3075)</label>
+
+      <div id="qrisBox" class="qrisbox">
+        <!-- taruh file qris.png di folder yang sama agar tampil -->
+        <img id="qrisImg" src="qris.png" alt="QRIS (ganti qris.png jika perlu)">
+        <p>Scan QRIS untuk bayar atau gunakan aplikasi bank/DANA.</p>
+      </div>
+
+      <label>Jumlah Pembayaran (Rp)
+        <input id="amount" type="number" required>
+      </label>
+
+      <button id="paidBtn" type="submit" class="btn primary">Saya Sudah Bayar</button>
+      <p class="muted">Setelah klik, admin akan menerima notifikasi WhatsApp.</p>
+    </form>
+  </main>
+
+  <script>
+    // Admin WA (format tanpa +)
+    const ADMIN_WA = '6281311383075';
+
+    // Produk (sama dengan file utama) — kalau mau, satukan di satu file
+    const PRODUCTS = {
+      'akun-1':{id:'akun-1',category:'akun',title:'Akun ML 86',price:20000},
+      'akun-2':{id:'akun-2',category:'akun',title:'Akun ML 170',price:35000},
+      'akun-3':{id:'akun-3',category:'akun',title:'Akun ML 344',price:65000},
+      'akun-4':{id:'akun-4',category:'akun',title:'Akun ML 514',price:95000},
+      'secret-1':{id:'secret-1',category:'secret',title:'Secret A',price:25000},
+      'koin-1':{id:'koin-1',category:'koin',title:'Koin 1000',price:15000}
+    };
+
+    function qs(v){return new URLSearchParams(location.search).get(v)}
+    const pid = qs('pid');
+    const product = PRODUCTS[pid] || Object.values(PRODUCTS)[0];
+
+    const productInfo = document.getElementById('productInfo');
+    productInfo.innerHTML = `<h2>${product.title}</h2><p class="price">Rp${product.price.toLocaleString()}</p>`;
+
+    // dynamic fields
+    const dyn = document.getElementById('dynamicFields');
+    if (product.category === 'akun') {
+      dyn.innerHTML = `
+        <label>Nomor WhatsApp Pembeli:
+          <input id="buyerPhone" name="buyerPhone" type="tel" placeholder="0812xxxx" required>
+        </label>
+      `;
+    } else {
+      dyn.innerHTML = `
+        <label>Username / ID Roblox:
+          <input id="robloxId" name="robloxId" type="text" placeholder="Masukkan Username/ID" required>
+        </label>
+        <label>Nomor WhatsApp Pembeli:
+          <input id="buyerPhone" name="buyerPhone" type="tel" placeholder="0812xxxx" required>
+        </label>
+      `;
+    }
+
+    // default amount = price
+    document.getElementById('amount').value = product.price;
+
+    // show/hide QR image by payment radio
+    document.querySelectorAll('input[name="pay"]').forEach(r=>{
+      r.addEventListener('change', ()=>{
+        document.getElementById('qrisBox').style.display = (r.value==='qris' && r.checked) ? 'block' : 'none';
+      });
+    });
+
+    // submit
+    document.getElementById('orderForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const buyerPhone = document.getElementById('buyerPhone').value.trim();
+      const robloxId = document.getElementById('robloxId') ? document.getElementById('robloxId').value.trim() : '';
+      const amount = Number(document.getElementById('amount').value) || product.price;
+      const payment = document.querySelector('input[name="pay"]:checked').value;
+      if(!buyerPhone){ alert('Isi nomor WhatsApp pembeli.'); return; }
+
+      const order = {
+        id: 'ORD' + Date.now(),
+        productId: product.id,
+        productTitle: product.title,
+        category: product.category,
+        price: product.price,
+        amount: amount,
+        buyerPhone: buyerPhone,
+        robloxId: robloxId,
+        paymentMethod: payment,
+        status: 'Pending',
+        createdAt: new Date().toISOString()
+      };
+
+      // simpan ke localStorage
+      const orders = JSON.parse(localStorage.getItem('dnr_orders')||'[]');
+      orders.unshift(order);
+      localStorage.setItem('dnr_orders', JSON.stringify(orders));
+
+      // Kirim notifikasi WA ke admin (open wa.me)
+      const message = [
+        'NOTIFIKASI PESANAN BARU',
+        'ID Pesanan: ' + order.id,
+        'Produk: ' + order.productTitle,
+        'Kategori: ' + order.category,
+        order.robloxId ? ('Username/ID: ' + order.robloxId) : '',
+        'Nomor Pembeli: ' + order.buyerPhone,
+        'Metode Pembayaran: ' + (order.paymentMethod === 'qris' ? 'QRIS' : 'DANA'),
+        'Jumlah: Rp' + order.amount.toLocaleString(),
+        'Waktu: ' + (new Date(order.createdAt)).toLocaleString(),
+        '',
+        'Tolong cek dan konfirmasi pengiriman.'
+      ].filter(Boolean).join('%0A');
+
+      // buka WA (tab baru)
+      const waUrl = 'https://wa.me/' + ADMIN_WA + '?text=' + encodeURIComponent(message);
+      window.open(waUrl, '_blank');
+
+      // redirect ke halaman status (kirim id)
+      location.href = 'status.html?order=' + encodeURIComponent(order.id);
+    });
+
+    // jika qris.png tidak ada, tampilkan teks
+    document.getElementById('qrisImg').addEventListener('error', function(){
+      this.style.display = 'none';
+      const p = document.createElement('p');
+      p.textContent = 'QRIS tidak ditemukan. Gunakan metode DANA atau upload file qris.png di folder situs.';
+      document.getElementById('qrisBox').appendChild(p);
+    });
+  </script>
+</body>
+</html>

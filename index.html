@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DNRstore - Toko</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <button id="menuBtn" class="hamburger">☰</button>
+    <h1>DNRstore</h1>
+  </header>
+
+  <main class="container">
+    <section class="categories">
+      <h2>Kategori</h2>
+      <div class="cats">
+        <div class="cat-card" data-type="akun">
+          <h3>Akun</h3>
+          <p>4 Pilihan</p>
+          <a class="btn" href="products.html?type=akun">Lihat</a>
+        </div>
+        <div class="cat-card" data-type="secret">
+          <h3>Secret</h3>
+          <p>4 Pilihan</p>
+          <a class="btn" href="products.html?type=secret">Lihat</a>
+        </div>
+        <div class="cat-card" data-type="koin">
+          <h3>Koin</h3>
+          <p>1 Pilihan</p>
+          <a class="btn" href="products.html?type=koin">Lihat</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="featured">
+      <h2>Produk Populer</h2>
+      <div id="productsGrid" class="grid"></div>
+    </section>
+  </main>
+
+  <script>
+    // Contoh produk — sesuaikan / tambahkan
+    const PRODUCTS = [
+      {id:'akun-1', category:'akun', title:'Akun Premium 1', price:45000},
+      {id:'akun-2', category:'akun', title:'Akun Premium 2', price:65000},
+      {id:'secret-1', category:'secret', title:'Secret Server 1', price:25000},
+      {id:'secret-2', category:'secret', title:'Secret Server 2', price:35000},
+      {id:'koin-1', category:'koin', title:'Koin 1000', price:15000}
+    ];
+
+    const grid = document.getElementById('productsGrid');
+    PRODUCTS.slice(0,4).forEach(p=>{
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.innerHTML = `
+        <h3>${p.title}</h3>
+        <p class="price">Rp${p.price.toLocaleString()}</p>
+        <a class="btn" href="checkout.html?pid=${encodeURIComponent(p.id)}">Beli</a>
+      `;
+      grid.appendChild(el);
+    });
+
+    // Link kategori page quick (produk.html)
+    document.querySelectorAll('.cat-card a').forEach(a=>{
+      a.addEventListener('click', e=>{
+        // normal link ke products.html (we provide a lightweight products page below)
+      });
+    });
+  </script>
+</body>
+</html>

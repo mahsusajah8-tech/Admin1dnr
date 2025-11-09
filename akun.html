@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DNR Store - Akun</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <button class="back" onclick="goHome()">←</button>
+    <h1>Akun</h1>
+  </header>
+
+  <main class="container">
+    <div class="product-grid">
+      <!-- 4 produk akun -->
+      <div class="product" data-name="Akun Sultan" data-price="150000">
+        <h3>Akun Sultan</h3>
+        <p class="price">Rp150.000</p>
+        <button onclick="buyFromCard(this)">Beli</button>
+      </div>
+
+      <div class="product" data-name="Akun Epic" data-price="90000">
+        <h3>Akun Epic</h3>
+        <p class="price">Rp90.000</p>
+        <button onclick="buyFromCard(this)">Beli</button>
+      </div>
+
+      <div class="product" data-name="Akun Legend" data-price="70000">
+        <h3>Akun Legend</h3>
+        <p class="price">Rp70.000</p>
+        <button onclick="buyFromCard(this)">Beli</button>
+      </div>
+
+      <div class="product" data-name="Akun Rare" data-price="35000">
+        <h3>Akun Rare</h3>
+        <p class="price">Rp35.000</p>
+        <button onclick="buyFromCard(this)">Beli</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <small>© 2025 DNR Store</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

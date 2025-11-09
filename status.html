@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Status Pesanan - DNRstore</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="back">←</a>
+    <h1>Status Pesanan</h1>
+  </header>
+
+  <main class="container">
+    <section>
+      <h2>Pesanan Terbaru</h2>
+      <div id="ordersWrap" class="ordersWrap"></div>
+    </section>
+  </main>
+
+  <script>
+    function qs(v){return new URLSearchParams(location.search).get(v)}
+    const targetId = qs('order');
+
+    const orders = JSON.parse(localStorage.getItem('dnr_orders')||'[]');
+
+    const wrap = document.getElementById('ordersWrap');
+    if (!orders.length) {
+      wrap.innerHTML = '<p class="muted">Belum ada pesanan.</p>';
+    } else {
+      // jika ada query order=id, highlight dan show single
+      const showList = (targetId ? orders.filter(o=>o.id===targetId) : orders);
+      showList.forEach(o=>{
+        const box = document.createElement('div');
+        box.className = 'orderCard';
+        box.innerHTML = `
+          <div class="orderHeader">
+            <strong>${o.productTitle}</strong>
+            <span class="status">${o.status}</span>
+          </div>
+          <div class="orderTableWrap">
+            <table class="orderTable">
+              <tr><th>ID Pesanan</th><td>${o.id}</td></tr>
+              <tr><th>Tanggal</th><td>${new Date(o.createdAt).toLocaleString()}</td></tr>
+              <tr><th>Produk</th><td>${o.productTitle}</td></tr>
+              <tr><th>Kategori</th><td>${o.category}</td></tr>
+              <tr><th>Username/ID</th><td>${o.robloxId || '-'}</td></tr>
+              <tr><th>Nomor Pembeli</th><td>${o.buyerPhone}</td></tr>
+              <tr><th>Metode</th><td>${o.paymentMethod === 'qris' ? 'QRIS' : 'DANA'}</td></tr>
+              <tr><th>Jumlah</th><td>Rp${o.amount.toLocaleString()}</td></tr>
+              <tr><th>Status</th><td>${o.status}</td></tr>
+            </table>
+          </div>
+        `;
+        wrap.appendChild(box);
+      });
+    }
+  </script>
+</body>
+</html>
