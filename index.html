@@ -6,57 +6,172 @@
 <title>DNRstore - Toko</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  /* ==== Popup Pengumuman ==== */
-  .announcement-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #0b1d33;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+  }
+
+  header.topbar {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    background: #111c2f;
+    padding: 12px;
   }
-  .announcement-box {
-    background: #0b1d33;
+
+  header h1 {
+    font-size: 22px;
     color: #fff;
+    margin: 0;
+  }
+
+  main.container {
     padding: 20px;
-    width: 90%;
-    max-width: 400px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(255,255,255,0.2);
-    animation: fadeIn .4s ease;
   }
-  .announcement-box h2 {
+
+  /* ==== Kategori ==== */
+  .categories {
     text-align: center;
-    margin-bottom: 10px;
   }
-  .announcement-box ul {
-    padding-left: 18px;
-    font-size: 14px;
+
+  .cats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
-  .announcement-box button {
-    margin-top: 15px;
+
+  @media(min-width:700px) {
+    .cats { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .cat-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    height: 200px;
+    transition: transform .3s ease, box-shadow .3s ease;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease forwards;
+  }
+
+  .cat-card:nth-child(1) { animation-delay: 0.2s; }
+  .cat-card:nth-child(2) { animation-delay: 0.4s; }
+  .cat-card:nth-child(3) { animation-delay: 0.6s; }
+
+  .cat-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+  }
+
+  .cat-card img {
     width: 100%;
-    padding: 10px;
-    background: #1e90ff;
-    border: none;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .cat-card:hover img {
+    transform: scale(1.1);
+  }
+
+  .cat-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-shadow: 1px 1px 4px #000;
+  }
+
+  .cat-overlay h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .cat-overlay p {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: #d6d6d6;
+  }
+
+  @keyframes fadeInUp {
+    from {opacity: 0; transform: translateY(30px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  /* Tombol Top Up */
+  .topup-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #1e90ff, #00c6ff);
     color: #fff;
     font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
+    text-decoration: none;
+    padding: 15px 40px;
+    border-radius: 12px;
+    margin-top: 30px;
+    font-size: 18px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
   }
-  @keyframes fadeIn {
-    from {opacity: 0; transform: scale(0.95);}
-    to {opacity: 1; transform: scale(1);}
+
+  .topup-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+  }
+
+  /* Produk Populer */
+  .featured {
+    margin-top: 40px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
+
+  .card {
+    background: #132341;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    transition: transform .3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  .price {
+    font-weight: bold;
+    color: #00d9ff;
+  }
+
+  .btn {
+    display: inline-block;
+    background: #1e90ff;
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    margin-top: 6px;
   }
 </style>
 </head>
 <body>
   <header class="topbar">
-    <button id="menuBtn" class="hamburger">☰</button>
     <h1>DNRstore</h1>
   </header>
 
@@ -64,22 +179,33 @@
     <section class="categories">
       <h2>Kategori</h2>
       <div class="cats">
-        <div class="cat-card" data-type="akun">
-          <h3>Akun</h3>
-          <p>4 Pilihan</p>
-          <a class="btn" href="products.html?type=akun">Lihat</a>
+        <div class="cat-card" onclick="location.href='products.html?type=akun'">
+          <img src="img/akun.jpg" alt="Akun">
+          <div class="cat-overlay">
+            <h3>AKUN</h3>
+            <p>4 Pilihan</p>
+          </div>
         </div>
-        <div class="cat-card" data-type="secret">
-          <h3>Secret</h3>
-          <p>4 Pilihan</p>
-          <a class="btn" href="products.html?type=secret">Lihat</a>
+
+        <div class="cat-card" onclick="location.href='products.html?type=secret'">
+          <img src="img/secret.jpg" alt="Secret">
+          <div class="cat-overlay">
+            <h3>SECRET</h3>
+            <p>4 Pilihan</p>
+          </div>
         </div>
-        <div class="cat-card" data-type="koin">
-          <h3>Koin</h3>
-          <p>1 Pilihan</p>
-          <a class="btn" href="products.html?type=koin">Lihat</a>
+
+        <div class="cat-card" onclick="location.href='products.html?type=koin'">
+          <img src="img/koin.jpg" alt="Koin">
+          <div class="cat-overlay">
+            <h3>KOIN</h3>
+            <p>1 Pilihan</p>
+          </div>
         </div>
       </div>
+
+      <!-- Tombol Top Up -->
+      <a href="topup.html" class="topup-btn">💰 Top Up Sekarang</a>
     </section>
 
     <section class="featured">
@@ -88,17 +214,7 @@
     </section>
   </main>
 
-  <!-- === Popup Pengumuman === -->
-  <div class="announcement-popup" id="announcementPopup" style="display:none;">
-    <div class="announcement-box">
-      <h2>📢 Pengumuman DNRstore</h2>
-      <ul id="announcementList"></ul>
-      <button onclick="closeAnnouncement()">Saya Paham</button>
-    </div>
-  </div>
-
   <script>
-    // ===== Produk =====
     const PRODUCTS = [
       {id:'akun-1', category:'akun', title:'Akun ghosfin 1', price:45000},
       {id:'akun-2', category:'akun', title:'Akun ares 2', price:65000},
@@ -118,28 +234,6 @@
       `;
       grid.appendChild(el);
     });
-
-    // ===== Pengumuman =====
-    async function loadAnnouncements() {
-      try {
-        const res = await fetch('announcement.json');
-        const data = await res.json();
-        const list = document.getElementById('announcementList');
-        list.innerHTML = data.map(item =>
-          `<li><strong>${item.date}</strong> - ${item.message}</li>`
-        ).join('');
-        document.getElementById('announcementPopup').style.display = 'flex';
-      } catch (err) {
-        console.error('Gagal memuat pengumuman:', err);
-      }
-    }
-
-    function closeAnnouncement() {
-      document.getElementById('announcementPopup').style.display = 'none';
-    }
-
-    loadAnnouncements();
   </script>
 </body>
 </html>
-
