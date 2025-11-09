@@ -1,80 +1,148 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>DNRstore - Toko</title>
-<link rel="stylesheet" href="style.css">
-<style>
-  /* Tambahan biar gambar kategori rapi */
-  .cat-card img.cat-img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 12px;
-    margin-bottom: 8px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNRstore - Toko</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* 🌙 Tampilan Utama */
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      background: radial-gradient(circle at top, #111 0%, #000 100%);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: linear-gradient(90deg, #ffcc00, #ffaa00);
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #000;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 10px rgba(255, 200, 0, 0.3);
+    }
+
+    .container {
+      padding: 25px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 25px;
+      text-shadow: 0 0 10px #ffcc00;
+    }
+
+    /* 🎴 Kartu kategori */
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .cat-card {
+      background: #1c1c1c;
+      border: 2px solid #333;
+      border-radius: 15px;
+      padding: 15px;
+      text-align: center;
+      width: 200px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+    }
+
+    .cat-card:hover {
+      transform: translateY(-8px) scale(1.05);
+      border-color: #ffcc00;
+      box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+    }
+
+    .cat-card img {
+      width: 100%;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .cat-card:hover img {
+      transform: scale(1.1);
+    }
+
+    .cat-card h3 {
+      margin: 10px 0 5px;
+      color: #ffcc00;
+      font-size: 18px;
+    }
+
+    .cat-card p {
+      margin: 0;
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    /* 🟡 Tombol */
+    .btn {
+      display: inline-block;
+      padding: 8px 15px;
+      background: linear-gradient(90deg, #ffcc00, #ffaa00);
+      color: #000;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      margin-top: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 8px rgba(255, 200, 0, 0.4);
+    }
+
+    .btn:hover {
+      background: linear-gradient(90deg, #fff100, #ffb700);
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(255, 220, 0, 0.6);
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 13px;
+      color: #777;
+    }
+  </style>
 </head>
 <body>
-  <header class="topbar">
-    <button id="menuBtn" class="hamburger">☰</button>
-    <h1>DNRstore</h1>
-  </header>
+  <header>DNRstore</header>
 
-  <main class="container">
-    <section class="categories">
-      <h2>Kategori</h2>
-      <div class="cats">
-        <div class="cat-card" data-type="akun">
-          <img src="img/akun.jpg" alt="Akun" class="cat-img">
-          <h3>Akun</h3>
-          <p>4 Pilihan</p>
-          <a class="btn" href="products.html?type=akun">Lihat</a>
-        </div>
+  <div class="container">
+    <h2>Kategori</h2>
 
-        <div class="cat-card" data-type="secret">
-          <img src="img/secret.jpg" alt="Secret" class="cat-img">
-          <h3>Secret</h3>
-          <p>4 Pilihan</p>
-          <a class="btn" href="products.html?type=secret">Lihat</a>
-        </div>
+    <div class="categories">
 
-        <div class="cat-card" data-type="koin">
-          <img src="img/koin.jpg" alt="Koin" class="cat-img">
-          <h3>Koin</h3>
-          <p>1 Pilihan</p>
-          <a class="btn" href="products.html?type=koin">Lihat</a>
-        </div>
+      <div class="cat-card">
+        <img src="img/akun.jpg" alt="Akun">
+        <h3>Akun</h3>
+        <p>4 Pilihan</p>
+        <a href="products.html?type=akun" class="btn">Lihat</a>
       </div>
-    </section>
 
-    <section class="featured">
-      <h2>Produk Populer</h2>
-      <div id="productsGrid" class="grid"></div>
-    </section>
-  </main>
+      <div class="cat-card">
+        <img src="img/secret.jpg" alt="Secret">
+        <h3>Secret</h3>
+        <p>4 Pilihan</p>
+        <a href="products.html?type=secret" class="btn">Lihat</a>
+      </div>
 
-  <script>
-    const PRODUCTS = [
-      {id:'akun-1', category:'akun', title:'Akun Premium 1', price:45000},
-      {id:'akun-2', category:'akun', title:'Akun Premium 2', price:65000},
-      {id:'secret-1', category:'secret', title:'Secret Server 1', price:25000},
-      {id:'secret-2', category:'secret', title:'Secret Server 2', price:35000},
-      {id:'koin-1', category:'koin', title:'Koin 1000', price:15000}
-    ];
+      <div class="cat-card">
+        <img src="img/koin.jpg" alt="Koin">
+        <h3>Koin</h3>
+        <p>1 Pilihan</p>
+        <a href="products.html?type=koin" class="btn">Lihat</a>
+      </div>
 
-    const grid = document.getElementById('productsGrid');
-    PRODUCTS.slice(0,4).forEach(p=>{
-      const el = document.createElement('div');
-      el.className = 'card';
-      el.innerHTML = `
-        <h3>${p.title}</h3>
-        <p class="price">Rp${p.price.toLocaleString()}</p>
-        <a class="btn" href="checkout.html?pid=${encodeURIComponent(p.id)}">Beli</a>
-      `;
-      grid.appendChild(el);
-    });
-  </script>
+    </div>
+  </div>
+
+  <footer>© 2025 DNRstore - All Rights Reserved</footer>
 </body>
 </html>
