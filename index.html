@@ -122,7 +122,7 @@
     // ===== Pengumuman =====
     async function loadAnnouncements() {
       try {
-        const res = await fetch('announcements.json');
+        const res = await fetch('announcement.json');
         const data = await res.json();
         const list = document.getElementById('announcementList');
         list.innerHTML = data.map(item =>
@@ -142,3 +142,4 @@
   </script>
 </body>
 </html>
+
