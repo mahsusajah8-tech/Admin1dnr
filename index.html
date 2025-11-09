@@ -5,6 +5,54 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>DNRstore - Toko</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  /* ==== Popup Pengumuman ==== */
+  .announcement-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  .announcement-box {
+    background: #0b1d33;
+    color: #fff;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    animation: fadeIn .4s ease;
+  }
+  .announcement-box h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .announcement-box ul {
+    padding-left: 18px;
+    font-size: 14px;
+  }
+  .announcement-box button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    background: #1e90ff;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  @keyframes fadeIn {
+    from {opacity: 0; transform: scale(0.95);}
+    to {opacity: 1; transform: scale(1);}
+  }
+</style>
 </head>
 <body>
   <header class="topbar">
@@ -40,8 +88,17 @@
     </section>
   </main>
 
+  <!-- === Popup Pengumuman === -->
+  <div class="announcement-popup" id="announcementPopup" style="display:none;">
+    <div class="announcement-box">
+      <h2>📢 Pengumuman DNRstore</h2>
+      <ul id="announcementList"></ul>
+      <button onclick="closeAnnouncement()">Saya Paham</button>
+    </div>
+  </div>
+
   <script>
-    // Contoh produk — sesuaikan / tambahkan
+    // ===== Produk =====
     const PRODUCTS = [
       {id:'akun-1', category:'akun', title:'Akun ghosfin 1', price:45000},
       {id:'akun-2', category:'akun', title:'Akun ares 2', price:65000},
@@ -62,13 +119,26 @@
       grid.appendChild(el);
     });
 
-    // Link kategori page quick (produk.html)
-    document.querySelectorAll('.cat-card a').forEach(a=>{
-      a.addEventListener('click', e=>{
-        // normal link ke products.html (we provide a lightweight products page below)
-      });
-    });
+    // ===== Pengumuman =====
+    async function loadAnnouncements() {
+      try {
+        const res = await fetch('announcements.json');
+        const data = await res.json();
+        const list = document.getElementById('announcementList');
+        list.innerHTML = data.map(item =>
+          `<li><strong>${item.date}</strong> - ${item.message}</li>`
+        ).join('');
+        document.getElementById('announcementPopup').style.display = 'flex';
+      } catch (err) {
+        console.error('Gagal memuat pengumuman:', err);
+      }
+    }
+
+    function closeAnnouncement() {
+      document.getElementById('announcementPopup').style.display = 'none';
+    }
+
+    loadAnnouncements();
   </script>
 </body>
-
 </html>
