@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Top Up - DNRstore</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #0b1d33;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+  }
+
+  header.topbar {
+    background: #111c2f;
+    text-align: center;
+    padding: 12px;
+  }
+
+  header h1 {
+    font-size: 22px;
+    margin: 0;
+    color: #fff;
+  }
+
+  main.container {
+    padding: 25px;
+    max-width: 500px;
+    margin: auto;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  form {
+    background: #132341;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+  }
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background: #1d3557;
+    color: #fff;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 5px #1e90ff;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #1e90ff, #00c6ff);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform .3s ease;
+  }
+
+  .btn:hover {
+    transform: scale(1.05);
+  }
+
+  .back-btn {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #1e90ff;
+    text-decoration: none;
+  }
+
+  .success-box {
+    display: none;
+    background: #132341;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  .success-box h3 {
+    color: #00ffb7;
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <h1>💰 Top Up DNRstore</h1>
+  </header>
+
+  <main class="container">
+    <h2>Isi Saldo atau Beli Produk</h2>
+
+    <form id="topupForm">
+      <label>Nama Pengguna</label>
+      <input type="text" id="username" placeholder="Masukkan username kamu" required>
+
+      <label>Nominal Top Up</label>
+      <select id="nominal" required>
+        <option value="">Pilih nominal</option>
+        <option value="10000">Rp10.000</option>
+        <option value="20000">Rp20.000</option>
+        <option value="50000">Rp50.000</option>
+        <option value="100000">Rp100.000</option>
+      </select>
+
+      <label>Metode Pembayaran</label>
+      <select id="metode" required>
+        <option value="">Pilih metode</option>
+        <option value="Dana">Dana</option>
+        <option value="Ovo">OVO</option>
+        <option value="Gopay">Gopay</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+      </select>
+
+      <button type="submit" class="btn">Kirim Top Up</button>
+    </form>
+
+    <div class="success-box" id="successBox">
+      <h3>✅ Top Up Berhasil Dikirim!</h3>
+      <p>Silakan tunggu konfirmasi admin melalui WhatsApp atau email.</p>
+    </div>
+
+    <a href="index.html" class="back-btn">⬅️ Kembali ke Beranda</a>
+  </main>
+
+  <script>
+    const form = document.getElementById('topupForm');
+    const successBox = document.getElementById('successBox');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const user = document.getElementById('username').value;
+      const nominal = document.getElementById('nominal').value;
+      const metode = document.getElementById('metode').value;
+
+      if (!user || !nominal || !metode) {
+        alert('Harap isi semua kolom!');
+        return;
+      }
+
+      // Bisa diganti dengan kirim data ke server / WhatsApp API
+      console.log(`Top up dari ${user}, nominal Rp${nominal}, metode ${metode}`);
+
+      form.style.display = 'none';
+      successBox.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
